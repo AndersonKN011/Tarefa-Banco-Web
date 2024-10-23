@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nubank - Banco EEVA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #4c54af;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .auth-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+
+        .auth-container h2 {
+            color: #333;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        
+        h2 {
+            color: #fff;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4c54af;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background-color: #4945a0;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Registro</h2>
+        <form id="authForm">
+            <input type="email" id="email" placeholder="E-mail" required>
+            <br>
+            <input type="password" id="password" placeholder="Senha" required>
+            <br>
+            <button id="registerButton" type="button">Registrar</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+    
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFqk6fb4BCl_E7_jZ1oeUS6wlKK4rAOe4",
+            authDomain: "eeva-bc184.firebaseapp.com",
+            projectId: "eeva-bc184",
+            storageBucket: "eeva-bc184.appspot.com",
+            messagingSenderId: "196508592738",
+            appId: "1:196508592738:web:4ae99c6d1fbad13a46bf3b"
+        };
+    
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+    
+        function register() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+    
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("Registro bem-sucedido!");
+                    window.location.href = "../login/index.html";
+                })
+                .catch((error) => {
+                    alert("Erro ao registrar: " + error.message);
+                });
+        }
+    
+        document.getElementById("registerButton").addEventListener("click", register);
+    </script>
+</body>
+</html>

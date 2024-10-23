@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extrato - Banco EEVA</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #4c54af;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .extrato-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 400px; /* Limitar a largura para manter a aparência do celular */
+            text-align: left;
+            color: #333;
+            position: relative;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #4c54af;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        
+        button:hover {
+            background-color: #4945a0;
+        }
+    </style>
+</head>
+<body>
+    <div class="extrato-container" id="extrato">
+        <h2>Extrato - Banco EEVA</h2>
+        <ul id="extratoList">
+            <!-- As transações serão adicionadas aqui dinamicamente -->
+        </ul>
+        <button onclick="voltarParaPrincipal()">Voltar</button>
+
+        <button id="limparExtrato" onclick="limparExtrato()">Limpar Extrato</button>
+    </div>
+
+    <script>
+        // Recuperar extrato do localStorage
+        let extrato = JSON.parse(localStorage.getItem("extrato")) || [];
+
+        // Exibir transações no extrato
+        const extratoList = document.getElementById("extratoList");
+        extrato.forEach(transacao => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${transacao.tipo}: R$ ${transacao.valor}`;
+            extratoList.appendChild(listItem);
+        });
+
+        function voltarParaPrincipal() {
+            window.location.href = "../bank/index.html";
+        }
+
+        function limparExtrato() {
+            const extratoList = document.getElementById("extratoList");
+            extratoList.innerHTML = ""; // Limpa apenas a lista de transações
+
+            // Limpa o localStorage removendo o item "extrato"
+            localStorage.removeItem("extrato");
+        }
+    </script>
+</body>
+</html>

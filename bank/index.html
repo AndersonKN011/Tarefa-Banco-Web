@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nubank - Banco EEVA</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #4c54af;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .bank-container {
+            background-color: #4c54af;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 400px; /* Limitar a largura para manter a aparência do celular */
+            text-align: center;
+            color: #fff;
+            position: relative;
+        }
+
+        h2 {
+            color: #fff;
+        }
+
+        #saldo {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #fff;
+            color: #4c54af;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="bank-container">
+        <h2>Nubank - Banco EEVA</h2>
+        <p id="saldo">Saldo: R$ <span id="saldoValor">00,00</span></p>
+        <button onclick="mostrarExtrato()">Extrato</button>
+        <button onclick="realizarDeposito()">Depósito</button>
+        <button onclick="realizarSaque()">Saque</button>
+        <button onclick="realizarTransferencia()">Transferência</button>
+    </div>
+
+    <script>
+        let saldo = parseFloat(localStorage.getItem("saldo")) || 0;
+
+        atualizarSaldo();
+        let extrato = JSON.parse(localStorage.getItem("extrato")) || [];
+
+        function mostrarExtrato() {
+            localStorage.setItem("extrato", JSON.stringify(extrato));
+
+            window.location.href = "../extract/index.html";
+        }
+
+        function realizarDeposito() {
+            const valorDepositado = prompt("Digite o valor a depositar:");
+            if (valorDepositado !== null && !isNaN(valorDepositado) && parseFloat(valorDepositado) > 0) {
+                saldo += parseFloat(valorDepositado);
+                extrato.push({ tipo: "Depósito", valor: parseFloat(valorDepositado).toFixed(2) });
+                atualizarSaldo();
+            } else {
+                alert("Por favor, insira um valor válido.");
+            }
+        }
+
+        function realizarSaque() {
+            const valorSaque = prompt("Digite o valor a sacar:");
+            if (valorSaque !== null && !isNaN(valorSaque) && parseFloat(valorSaque) > 0 && parseFloat(valorSaque) <= saldo) {
+                saldo -= parseFloat(valorSaque);
+                extrato.push({ tipo: "Saque", valor: parseFloat(valorSaque).toFixed(2) });
+                atualizarSaldo();
+            } else if (parseFloat(valorSaque) > saldo) {
+                alert("Saldo insuficiente.");
+            } else {
+                alert("Por favor, insira um valor válido.");
+            }
+        }
+
+        function realizarTransferencia() {
+            const valorTransferencia = prompt("Digite o valor a transferir:");
+            if (valorTransferencia !== null && !isNaN(valorTransferencia) && parseFloat(valorTransferencia) > 0 && parseFloat(valorTransferencia) <= 1000 && parseFloat(valorTransferencia) <= saldo) {
+                saldo -= parseFloat(valorTransferencia);
+                extrato.push({ tipo: "Transferência", valor: parseFloat(valorTransferencia).toFixed(2) });
+                atualizarSaldo();
+            } else if (parseFloat(valorTransferencia) > 1000) {
+                alert("A transferência não pode ser maior que R$ 1.000,00.");
+            } else if (parseFloat(valorTransferencia) > saldo) {
+                alert("Saldo insuficiente.");
+            } else {
+                alert("Por favor, insira um valor válido.");
+            }
+        }
+
+        function atualizarSaldo() {
+            document.getElementById("saldoValor").textContent = saldo.toFixed(2);
+            localStorage.setItem("saldo", saldo.toFixed(2));
+        }
+    </script>
+</body>
+</html>
